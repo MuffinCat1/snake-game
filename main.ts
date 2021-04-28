@@ -58,11 +58,11 @@ function placeNextApple() {
     apple.setBrightness(100);
 }
 
-function turnLeft() {
+function turnRight() {
     direction = (direction + 3) % 4;
 }
 
-function turnRight() {
+function turnLeft() {
     direction = (direction + 1) % 4;
 }
 
