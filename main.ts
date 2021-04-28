@@ -27,6 +27,29 @@ function gameOver() {
     game.gameOver();
 }
 
+function win(){
+    game.setScore(score)
+    game.pause()
+    basic.pause(1000)
+    for(let i = 0; i < 4; i++){
+        basic.showString("YOU WIN" + game.showScore())
+    }
+    resetGame()
+}
+
+function resetGame(){
+    game.setScore(0)
+    score = 0
+    px = 0
+    py = 0
+    for (let s of snake){
+        s.delete()
+    }
+    snake = initSnake([px, py, px + 1, py])
+    placeNextApple()
+    game.resume()
+}
+
 function moveForward() {
     let dx = dxOffset[direction];
     px += dx[0];
@@ -99,9 +122,9 @@ function letComputerPlay() {
     if (dist1 <= dist2 && dist1 <= dist3) {
         return;
     } else if (dist2 <= dist1 && dist2 <= dist3) {
-        turnRight();
-    } else if (dist3 <= dist1 && dist3 <= dist2) {
         turnLeft();
+    } else if (dist3 <= dist1 && dist3 <= dist2) {
+        turnRight();
     }
 }
 
@@ -113,16 +136,13 @@ input.onButtonPressed(Button.B, function () {
     turnRight();
 })
 
-input.onButtonPressed(Button.AB, function () {
-    letComputerPlay()
-})
-
 basic.forever(function () {
     if (game.isGameOver()) {
         return;
     }
     let delay = Math.max(100, 1000 - score * 50);
     basic.pause(delay);
+    //letComputerPlay()
     moveForward();
     if (snake[0].isTouching(apple)) {
         if (snake.length < maxLength) {
@@ -131,4 +151,9 @@ basic.forever(function () {
         score++;
         placeNextApple();
     }
+
+    if(score >= 12){
+        win()
+    }
+
 })
