@@ -27,20 +27,6 @@ function gameOver() {
     game.gameOver();
 }
 
-function resetGame() {
-    game.setScore(0);
-    score = 0;
-    direction = 0;
-    px = 0;
-    py = 0;
-    for (let s of snake) {
-        s.delete();
-    }
-    snake = initSnake([px, py, px + 1, py]);
-    placeNextApple();
-    game.resume();
-}
-
 function moveForward() {
     let dx = dxOffset[direction];
     px += dx[0];
@@ -128,11 +114,7 @@ input.onButtonPressed(Button.B, function () {
 })
 
 input.onButtonPressed(Button.AB, function () {
-    resetGame();
-})
-
-input.onLogoEvent(TouchButtonEvent.Pressed, function () {
-  letComputerPlay()  
+    letComputerPlay()
 })
 
 basic.forever(function () {
