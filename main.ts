@@ -1,10 +1,14 @@
 let direction = 1;
 let dxOffset = [[1, 0], [0, 1], [-1, 0], [0, -1]];
-let score = 0;
+let score = 11;
 let px = 0;
 let py = 0;
 let snake = initSnake([px, py, px + 1, py]);
 let apple = game.createSprite(2, 2);
+
+let botPlaying : boolean
+let isWin : boolean
+
 const maxLength = 10;
 placeNextApple();
 
@@ -28,6 +32,7 @@ function gameOver() {
 }
 
 function win(){
+    isWin = true
     game.setScore(score)
     game.pause()
     basic.pause(1000)
@@ -119,6 +124,8 @@ function letComputerPlay() {
         dist3 = Math.abs(nx3 - apple.x()) + Math.abs(ny3 - apple.y());
     }
 
+    console.log(dist1 + "," + dist2 + "," + dist3)
+
     if (dist1 <= dist2 && dist1 <= dist3) {
         return;
     } else if (dist2 <= dist1 && dist2 <= dist3) {
@@ -129,11 +136,36 @@ function letComputerPlay() {
 }
 
 input.onButtonPressed(Button.A, function () {
+    if(botPlaying){
+        return
+    }
     turnLeft();
 })
 
 input.onButtonPressed(Button.B, function () {
+    if(botPlaying){
+        return
+    }
     turnRight();
+})
+
+input.onLogoEvent(TouchButtonEvent.Pressed, function () {
+    while(true){
+        if(!botPlaying){
+            botPlaying = true
+            for(let i = 0; i < Infinity; i++){
+                letComputerPlay()
+                basic.pause(150)
+                
+                if(game.isGameOver() || isWin){
+                    return
+                }
+            }
+        } else {
+            break
+            return
+        }
+    }
 })
 
 basic.forever(function () {
@@ -155,5 +187,4 @@ basic.forever(function () {
     if(score >= 12){
         win()
     }
-
 })
